@@ -1,0 +1,22 @@
+.player-controls {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 0 119px;
+}
+
+.fas {
+  font-size: 30px;
+  color: rgb(129, 129, 129);
+  cursor: pointer;
+  user-select: none;
+}
+
+.fas:hover {
+  filter: brightness(80%);
+}
+
+.main-button {
+  font-size: 40px;
+  padding-bottom: 3px;
+}
