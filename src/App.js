@@ -1,15 +1,20 @@
-import React from 'react';
+import React, { useState } from 'react';
 import './App.css';
 import ImageContainer from './components/image-container/image-container.component';
 import ProgressBar from './components/progress-bar/progress-bar.component';
 import ControlButtons from './components/control-buttons/control-buttons.component';
 
+
 function App() {
+  const [isPlaying, setIsPlaying] = useState(false);
+  const [currentSongIndex, setCurrentSongIndex] = useState(0);
+  const obj = {isPlaying, setIsPlaying, currentSongIndex, setCurrentSongIndex};
+
   return (
     <div className="player-container">
-      <ImageContainer />
+      <ImageContainer currentSongIndex={currentSongIndex}/>
       <ProgressBar />
-      <ControlButtons />
+      <ControlButtons {...obj}/>
     </div>
   );
 }

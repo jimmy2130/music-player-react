@@ -1,17 +1,21 @@
 import React from 'react';
 import jacinto1_img from '../../img/jacinto-1.jpg';
-import jacinto1_music from '../../music/jacinto-1.mp3';
+import jacinto2_img from '../../img/jacinto-2.jpg';
+import jacinto3_img from '../../img/jacinto-3.jpg';
+import metric1_img from '../../img/metric-1.jpg';
 import './image-container.styles.css';
+import { songs } from '../songs.js';
 
-const ImageContainer = () => {
+const gallery = [jacinto1_img, jacinto2_img, jacinto3_img, metric1_img];
+
+const ImageContainer = ({ currentSongIndex }) => {
   return(
     <div>
       <div className="img-container">
-        <img src={jacinto1_img} alt="Album Art" />
+        <img src={gallery[currentSongIndex]} alt="Album Art" />
       </div>
-      <h2>Electric Chill Machine</h2>
-      <h3>Jacinto Design</h3>
-      <audio src={jacinto1_music}></audio>
+      <h2>{songs[currentSongIndex].displayName}</h2>
+      <h3>{songs[currentSongIndex].artist}</h3>
     </div>
   );
 }
