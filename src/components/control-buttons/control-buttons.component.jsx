@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import './control-buttons.styles.css';
 import jacinto1_music from '../../music/jacinto-1.mp3';
 import jacinto2_music from '../../music/jacinto-2.mp3';
@@ -11,23 +11,30 @@ import { songs } from '../songs.js';
 
 const playList = [jacinto1_music, jacinto2_music, jacinto3_music, metric1_music];
 
-const ControlButtons = ({ isPlaying, setIsPlaying, currentSongIndex, setCurrentSongIndex }) => {
+const ControlButtons = ({ isPlaying, setIsPlaying, currentSongIndex, setCurrentSongIndex, musicInfo, setMusicInfo }) => {
+  const [clicked, setClicked] = useState(0);
   const changePlayStatus = () => {
     setIsPlaying(!isPlaying);
   }
 
   const nextSong = () => {
-    if(currentSongIndex === songs.length - 1)
+    if(currentSongIndex === songs.length - 1) {
       setCurrentSongIndex(0);
-    else
+    }
+    else {
       setCurrentSongIndex(currentSongIndex + 1);
+    }
+    setClicked(clicked + 1);
   }
 
   const prevSong = () => {
-    if(currentSongIndex === 0)
+    if(currentSongIndex === 0) {
       setCurrentSongIndex(songs.length - 1);
-    else
+    }
+    else {
       setCurrentSongIndex(currentSongIndex - 1);
+    }
+    setClicked(clicked + 1);
   }
 
   // triggered when song is changed
@@ -36,17 +43,50 @@ const ControlButtons = ({ isPlaying, setIsPlaying, currentSongIndex, setCurrentS
       window.audio.pause();
     window.audio = new Audio();
     window.audio.src = playList[currentSongIndex];
-  }, [currentSongIndex])
+  }, [currentSongIndex]);
+
+  // if the song is changed, automatically play the song
+  useEffect(() => {
+    if(clicked !== 0) {
+      setIsPlaying(true);
+      window.audio.play();
+    }
+  }, [clicked, setIsPlaying]);
 
   // triggered when play status is changed
-  // if the song is changed, automatically play the song
   useEffect(() => {
     if(isPlaying) {
       window.audio.play();
     } else {
       window.audio.pause();
     }
-  }, [isPlaying, currentSongIndex])
+  }, [isPlaying]);
+
+  // useEffect(() => {
+  //   const nextSong = () => {
+  //     if(currentSongIndex === songs.length - 1)
+  //       setCurrentSongIndex(0);
+  //     else
+  //       setCurrentSongIndex(currentSongIndex + 1);
+  //   }
+  //   window.audio.addEventListener('ended', nextSong);
+  //   return () => window.removeEventListener('ended', nextSong);
+  // }, [currentSongIndex, setCurrentSongIndex]);
+
+
+  useEffect(() => {
+    const updateProgressBar = (e) => {
+    setMusicInfo(
+      {
+        duration: e.srcElement.duration,
+        currentTime: e.srcElement.currentTime
+      }
+    )
+  }
+
+    window.audio.addEventListener('timeupdate', updateProgressBar);
+    return () => window.audio.removeEventListener('timeupdate', updateProgressBar);
+  }, [currentSongIndex, setMusicInfo]);
 
   return(
     <div className="player-controls">
