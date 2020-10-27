@@ -11,7 +11,7 @@ import { songs } from '../songs.js';
 
 const playList = [jacinto1_music, jacinto2_music, jacinto3_music, metric1_music];
 
-const ControlButtons = ({ isPlaying, setIsPlaying, currentSongIndex, setCurrentSongIndex, musicInfo, setMusicInfo }) => {
+const ControlButtons = ({ isPlaying, setIsPlaying, currentSongIndex, setCurrentSongIndex, musicInfo, setMusicInfo, updateBar, firstTimeSetBar, setFirstTimeSetBar }) => {
   const [clicked, setClicked] = useState(0);
   const changePlayStatus = () => {
     setIsPlaying(!isPlaying);
@@ -57,36 +57,59 @@ const ControlButtons = ({ isPlaying, setIsPlaying, currentSongIndex, setCurrentS
   useEffect(() => {
     if(isPlaying) {
       window.audio.play();
-    } else {
+      window.audio.muted = firstTimeSetBar ? true : false;
+    }
+    else {
       window.audio.pause();
     }
-  }, [isPlaying]);
+  }, [isPlaying, firstTimeSetBar]);
 
-  // useEffect(() => {
-  //   const nextSong = () => {
-  //     if(currentSongIndex === songs.length - 1)
-  //       setCurrentSongIndex(0);
-  //     else
-  //       setCurrentSongIndex(currentSongIndex + 1);
-  //   }
-  //   window.audio.addEventListener('ended', nextSong);
-  //   return () => window.removeEventListener('ended', nextSong);
-  // }, [currentSongIndex, setCurrentSongIndex]);
+  // triggered when user clicks the progress bar
+  useEffect(() => {
+    if(!firstTimeSetBar)
+      window.audio.currentTime = updateBar;
+  }, [updateBar, firstTimeSetBar]);
 
+  // triggered when song is finished
+  useEffect(() => {
+    const nextSong = () => {
+      if(currentSongIndex === songs.length - 1) {
+        setCurrentSongIndex(0);
+      }
+      else {
+        setCurrentSongIndex(currentSongIndex + 1);
+      }
+      setClicked(clicked + 1);
+    }
+    window.audio.addEventListener('ended', nextSong);
+    return () => window.removeEventListener('ended', nextSong);
+  }, [currentSongIndex, setCurrentSongIndex, clicked, setClicked]);
 
+  // update progress bar
   useEffect(() => {
     const updateProgressBar = (e) => {
-    setMusicInfo(
-      {
-        duration: e.srcElement.duration,
-        currentTime: e.srcElement.currentTime
+      if(firstTimeSetBar === false) {
+        setMusicInfo(
+          {
+            duration: e.srcElement.duration,
+            currentTime: e.srcElement.currentTime
+          }
+        )
+      } 
+      else if(firstTimeSetBar === true) {
+        setFirstTimeSetBar(false);
+        setMusicInfo(
+          {
+            duration: e.srcElement.duration,
+            currentTime: updateBar * e.srcElement.duration
+          }
+        )
+        window.audio.currentTime = updateBar * e.srcElement.duration;
       }
-    )
-  }
-
+    }
     window.audio.addEventListener('timeupdate', updateProgressBar);
     return () => window.audio.removeEventListener('timeupdate', updateProgressBar);
-  }, [currentSongIndex, setMusicInfo]);
+  }, [currentSongIndex, setMusicInfo, firstTimeSetBar, setFirstTimeSetBar, updateBar]);
 
   return(
     <div className="player-controls">

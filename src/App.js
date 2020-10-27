@@ -8,8 +8,21 @@ function App() {
   const [isPlaying, setIsPlaying] = useState(false);
   const [currentSongIndex, setCurrentSongIndex] = useState(0);
   const [musicInfo, setMusicInfo] = useState({currentTime: 0, duration: 0});
+  const [updateBar, setUpdateBar] = useState(0);
+  const [firstTimeSetBar, setFirstTimeSetBar] = useState(false);
 
-  const obj = {isPlaying, setIsPlaying, currentSongIndex, setCurrentSongIndex, musicInfo, setMusicInfo};
+  const obj = {
+    isPlaying,
+    setIsPlaying,
+    currentSongIndex,
+    setCurrentSongIndex,
+    musicInfo,
+    setMusicInfo,
+    updateBar,
+    setUpdateBar,
+    firstTimeSetBar,
+    setFirstTimeSetBar
+  };
 
   return (
     <div className="player-container">
