@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import './control-buttons.styles.css';
-import jacinto1_music from '../../music/jacinto-1.mp3';
+// import jacinto1_music from '../../music/jacinto-1.mp3';
 import jacinto2_music from '../../music/jacinto-2.mp3';
 import jacinto3_music from '../../music/jacinto-3.mp3';
 import metric1_music from '../../music/metric-1.mp3';
@@ -8,8 +8,10 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBackward, faPlay, faPause, faForward } from '@fortawesome/free-solid-svg-icons';
 import { songs } from '../songs.js';
 
-
-const playList = [jacinto1_music, jacinto2_music, jacinto3_music, metric1_music];
+// 用chrome檢視元件可以得到音樂的網址
+let url = 'https://www.tintinpiano.com/piano_note/mp3/cffed98d9a3b79856c85b59fcaf33adf.mp3';
+// const playList = [jacinto1_music, jacinto2_music, jacinto3_music, metric1_music];
+const playList = [url, jacinto2_music, jacinto3_music, metric1_music];
 
 const ControlButtons = ({ isPlaying, setIsPlaying, currentSongIndex, setCurrentSongIndex, musicInfo, setMusicInfo, updateBar, firstTimeSetBar, setFirstTimeSetBar }) => {
   const [clicked, setClicked] = useState(0);
