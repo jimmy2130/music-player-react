@@ -2,8 +2,10 @@ export const songs = [
   {
     index: 0,
     name: 'jacinto-1',
-    displayName: 'Electric Chill Machine',
-    artist: 'Jacinto Design'
+    // displayName: 'Electric Chill Machine',
+    displayName: '抱歉，我不抱歉',
+    // artist: 'Jacinto Design'
+    artist: 'A-Lin'
   },
   {
     index: 1,
